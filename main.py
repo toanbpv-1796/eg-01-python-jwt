@@ -15,7 +15,7 @@ def main():
         result = SendEnvelope(api_client).send_envelope()
         print(f"Envelope status: {result.status}. Envelope ID: {result.envelope_id}")
 
-        print("\nList envelopes in the account...")
+        print("\nList envelopes in the account whose status changed in the last 30 days...")
         envelopes_list = ListEnvelopes(api_client).list()
         envelopes = envelopes_list.envelopes
         num_envelopes = len(envelopes)
