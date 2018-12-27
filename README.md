@@ -23,7 +23,8 @@ a user in the account.
 
 This launcher example includes two examples:
 1. Send an html, Word, and PDF file in an envelope to be signed.
-1. List the envelopes in the account that are less than 30 days old.
+1. List the envelopes in the account whose status 
+   changed in the last 30 days.
 
 ## Installation
 
@@ -35,45 +36,40 @@ Download or clone this repository. Then:
 ````
 cd eg-01-Python-jwt
 pip install docusign_esign
-
-# Create the config file
-cp ds_config_EXAMPLE.ini ds_config.ini
 ````
 
 ### Configure the example's settings
 
-You can configure the example either via an .ini file or via
-environment variables:
-
-*  **ds_config.ini:** Edit the `ds_config.ini` file in the root
-   directory.
-   (After creating it from the `ds_config_EXAMPLE.ini` file.)
-
-   **Note:** the private key's second and subsequent
-   lines need to have a space added at the beginning due
-   to requirements from the Python configuration file
-   parser. See the example config file for an example.
-
-   More information for the configuration settings is below.
-*  Or via **environment variables:** export the needed
-   environment variables. The file `ds_config.py` reads
-   the variables.
-
-`ds_config.ini` is in the .gitignore file so your
-private information will not be added to your repository.
-Do not store your Integration Key, private key, or other
-private information in your code repository.
+Configure the **ds_config.ini** file:
 
 #### Creating the Integration Key
 Your DocuSign Integration Key must be configured for a JWT OAuth authentication flow:
 * Create a public/private key pair for the key. Store the private key
   in a secure location. You can use a file or a key vault.
 * The example requires the private key. Store the private key in the
-  `ds_config.ini` file or in the environment variable
-  `DS_PRIVATE_KEY`.
+  `ds_config.ini` file.
+    
+  **Note:** the private key's second and subsequent
+  lines need to have a space added at the beginning due
+  to requirements from the Python configuration file
+  parser. Example:
+   
+````
+# private key string
+# NOTE: the Python config file parser requires that you 
+# add a space at the beginning of the second and
+# subsequent lines of the multiline key value:  
+DS_PRIVATE_KEY=-----BEGIN RSA PRIVATE KEY-----
+ N7b6a66DYU8/0BwH47oJA7lBHBbJcc76v+1892cCgYEArtQjCt15ZT4aux//2ZWD
+ ....
+ PEHgznlGh/vUboCuA4tQOcKytxFfKG4F+jM/g4GH9z46KZOow3Hb6g==
+ -----END RSA PRIVATE KEY-----
+````   
+
 * If you will be using individual permission grants, you must create a
   `Redirect URI` for the key. Any URL can be used. By default, this
   example uses `https://www.docusign.com`
+
 
 #### The impersonated user's guid
 The JWT will impersonate a user within your account. The user can be

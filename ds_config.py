@@ -20,10 +20,10 @@ class DSConfig:
             self.config["DS_AUTH_SERVER"] = os.environ.get("DS_AUTH_SERVER")
             self.config["DS_IMPERSONATED_USER_GUID"] = os.environ.get("DS_IMPERSONATED_USER_GUID")
             self.config["DS_TARGET_ACCOUNT_ID"] = os.environ.get("DS_TARGET_ACCOUNT_ID")
-            self.config["DS_SIGNER_1_EMAIL"] = os.environ.get("DS_SIGNER_1_EMAIL")
-            self.config["DS_SIGNER_1_NAME"] = os.environ.get("DS_SIGNER_1_NAME")
-            self.config["DS_CC_1_EMAIL"] = os.environ.get("DS_CC_1_EMAIL")
-            self.config["DS_CC_1_NAME"] = os.environ.get("DS_CC_1_NAME")
+            self.config["DS_SIGNER_EMAIL"] = os.environ.get("DS_SIGNER_EMAIL")
+            self.config["DS_SIGNER_NAME"] = os.environ.get("DS_SIGNER_NAME")
+            self.config["DS_CC_EMAIL"] = os.environ.get("DS_CC_EMAIL")
+            self.config["DS_CC_NAME"] = os.environ.get("DS_CC_NAME")
             self.config["DS_PRIVATE_KEY"] = os.environ.get("DS_PRIVATE_KEY")
         else:
             ini_file = 'ds_config.ini'
@@ -65,28 +65,28 @@ class DSConfig:
         return DSConfig.getInstance()._target_account_id()
 
     def _signer_email(self):
-        return self.config["DS_SIGNER_1_EMAIL"]
+        return self.config["DS_SIGNER_EMAIL"]
 
     @staticmethod
     def signer_email():
         return DSConfig.getInstance()._signer_email()
 
     def _signer_name(self):
-        return self.config["DS_SIGNER_1_NAME"]
+        return self.config["DS_SIGNER_NAME"]
 
     @staticmethod
     def signer_name():
         return DSConfig.getInstance()._signer_name()
 
     def _cc_email(self):
-        return self.config["DS_CC_1_EMAIL"]
+        return self.config["DS_CC_EMAIL"]
 
     @staticmethod
     def cc_email():
         return DSConfig.getInstance()._cc_email()
 
     def _cc_name(self):
-        return self.config["DS_CC_1_NAME"]
+        return self.config["DS_CC_NAME"]
 
     @staticmethod
     def cc_name():
