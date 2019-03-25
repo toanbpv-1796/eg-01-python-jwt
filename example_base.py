@@ -1,11 +1,8 @@
 import time
 
 from ds_config import DSConfig
-from ds_helper import DSHelper
 
 TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60
-TOKEN_EXPIRATION_IN_SECONDS = 3600
-
 
 class ExampleBase:
     """
@@ -29,16 +26,13 @@ class ExampleBase:
     def update_token(self):
         client = ExampleBase.api_client
 
-        private_key_file = DSHelper.create_private_key_temp_file("private-key")
-
         print ("Requesting an access token via JWT grant...", end='')
-        client.configure_jwt_authorization_flow(private_key_file.name,
-                                                DSConfig.aud(),
-                                                DSConfig.client_id(),
-                                                DSConfig.impersonated_user_guid(), TOKEN_EXPIRATION_IN_SECONDS)
-
-        private_key_file.close()
-
+        client_id = DSConfig.client_id()
+        user_id = DSConfig.impersonated_user_guid()
+        aud = DSConfig.aud()
+        private_key_bytes = DSConfig.private_key()
+        expires_in = 3600
+        oauth_results = client.request_jwt_user_token(client_id, user_id, aud, private_key_bytes, expires_in)
         if ExampleBase.account is None:
             account = self.get_account_info(client)
 
@@ -46,7 +40,7 @@ class ExampleBase:
         ExampleBase.accountID = account['account_id']
         client.host = ExampleBase.base_uri
         ExampleBase._token_received = True
-        ExampleBase.expiresTimestamp = (int(round(time.time())) + TOKEN_EXPIRATION_IN_SECONDS)
+        ExampleBase.expiresTimestamp = (int(round(time.time())) + int(oauth_results.expires_in))
         print ("Done. Continuing...")
 
     def get_account_info(self, client):
