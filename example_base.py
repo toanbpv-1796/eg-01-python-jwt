@@ -13,6 +13,7 @@ class ExampleBase:
     _token_received = False
     account = None
     expiresTimestamp = 0
+    access_token = None
 
     def __init__(self, api_client):
         ExampleBase.api_client = api_client
@@ -33,35 +34,34 @@ class ExampleBase:
         private_key_bytes = DSConfig.private_key()
         expires_in = 3600
         oauth_results = client.request_jwt_user_token(client_id, user_id, aud, private_key_bytes, expires_in)
+        
+        ExampleBase.access_token = oauth_results.access_token
         if ExampleBase.account is None:
             account = self.get_account_info(client)
 
-        ExampleBase.base_uri = account['base_uri'] + '/restapi'
-        ExampleBase.accountID = account['account_id']
+        ExampleBase.base_uri = account.base_uri + '/restapi'
+        ExampleBase.accountID = account.account_id
         client.host = ExampleBase.base_uri
         ExampleBase._token_received = True
         ExampleBase.expiresTimestamp = (int(round(time.time())) + int(oauth_results.expires_in))
         print ("Done. Continuing...")
 
     def get_account_info(self, client):
-        client.host = DSConfig.auth_server()
-        response = client.call_api("/oauth/userinfo", "GET", response_type="object")
+        client.set_oauth_base_path(DSConfig.aud())
+        response = client.get_user_info(ExampleBase.access_token)
 
-        if len(response) > 1 and 200 > response[1] > 300:
-            raise Exception("can not get user info: %d".format(response[1]))
-
-        accounts = response[0]['accounts']
+        accounts = response.accounts
         target = DSConfig.target_account_id()
 
         if target is None or target == "FALSE":
             # Look for default
             for acct in accounts:
-                if acct['is_default']:
+                if acct.is_default == 'True':
                     return acct
 
         # Look for specific account
         for acct in accounts:
-            if acct['account_id'] == target:
+            if acct.account_id == target:
                 return acct
 
         raise Exception(f"\n\nUser does not have access to account {target}\n\n")
