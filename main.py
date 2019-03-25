@@ -1,5 +1,5 @@
 import docusign_esign as docusign
-
+from docusign_esign.client.api_exception import ApiException
 from ds_helper import DSHelper
 from list_envelopes import ListEnvelopes
 from send_envelope import SendEnvelope
@@ -26,7 +26,7 @@ def main():
             print(f"Results for {num_envelopes} envelopes were returned:\n")
 
         DSHelper.print_pretty_json(envelopes_list)
-    except docusign.rest.ApiException as err:
+    except ApiException as err:
         print ("\n\nDocuSign Exception!")
 
         # Special handling for consent_required
