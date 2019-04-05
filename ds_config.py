@@ -90,7 +90,7 @@ class DSConfig:
 
     @staticmethod
     def cc_name():
-        return DSConfig.getInstance()._cc_name();
+        return DSConfig.getInstance()._cc_name()
 
     def _private_key(self):
         return self.config["DS_PRIVATE_KEY"]

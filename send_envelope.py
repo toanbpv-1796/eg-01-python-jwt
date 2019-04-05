@@ -42,6 +42,7 @@ class SendEnvelope(ExampleBase):
         )
         doc1_b64 = base64.b64encode(
             bytes(self.create_document1(args), 'utf-8')).decode('ascii')
+
         # read files 2 and 3 from a local directory
         # The reads could raise an exception if the file is not available!
         with open(path.join(demo_docs_path, DOC_2_DOCX),
